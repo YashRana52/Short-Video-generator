@@ -15,7 +15,7 @@ export const getUserCredits = async (req: Request, res: Response) => {
       });
     }
 
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: { id: userId },
       select: { credits: true },
     });

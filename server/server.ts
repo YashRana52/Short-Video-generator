@@ -1,14 +1,15 @@
 import "./lib/instrument.mjs";
 import express, { Request, Response } from "express";
 import { clerkMiddleware } from "@clerk/express";
-import clerkWebhooks from "./controllers/clerk.js";
+
 import * as Sentry from "@sentry/node";
+
+import cors from "cors";
+import clerkWebhooks from "./controllers/clerk.js";
 import userRouter from "./routes/user.js";
 import projectRouter from "./routes/project.js";
-import cors from "cors";
 
 const app = express();
-
 const PORT = 5000;
 
 app.use(
@@ -19,30 +20,22 @@ app.use(
   }),
 );
 
-app.post(
-  "/api/clerk",
-  express.raw({ type: "application/json" }),
-  clerkWebhooks,
-);
+// Webhook route (raw body)
+app.post("/api/clerk", express.raw({ type: "*/*" }), clerkWebhooks);
 
-//middlewares
-
+// Other middlewares
 app.use(express.json());
-
 app.use(clerkMiddleware());
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Server is Live!");
-});
-
-app.get("/debug-sentry", function mainHandler(req, res) {
+// Routes
+app.get("/", (req: Request, res: Response) => res.send("Server is Live!"));
+app.get("/debug-sentry", () => {
   throw new Error("My first Sentry error!");
 });
-
 app.use("/api/user", userRouter);
 app.use("/api/project", projectRouter);
 
-// The error handler must be registered before any other error middleware and after all controllers
+// Sentry error handler
 Sentry.setupExpressErrorHandler(app);
 
 app.listen(PORT, () => {

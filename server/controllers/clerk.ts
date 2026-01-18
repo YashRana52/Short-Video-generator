@@ -11,6 +11,7 @@ const clerkWebhooks = async (req: Request, res: Response) => {
 
     const { data, type } = evt;
     //Switch cases for diff event
+    console.log("Webhook verified:", evt.type);
 
     switch (type) {
       case "user.created": {
