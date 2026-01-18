@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "target": "ES2020",
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "outDir": "./dist",
@@ -7,11 +8,8 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmitOnError": false,
-    "baseUrl": ".",
-    "paths": {
-      "@generated/*": ["generated/*"]
-    }
-  }
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"]
 }
