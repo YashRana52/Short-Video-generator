@@ -1,0 +1,26 @@
+import { NextFunction, Request, Response } from "express";
+import * as Sentry from "@sentry/node";
+
+export const protect = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { userId } = req.auth();
+
+    if (!userId) {
+      return res.json({
+        success: false,
+        message: "unauthorised",
+      });
+    }
+    next();
+  } catch (error: any) {
+    Sentry.captureException(error);
+    return res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
