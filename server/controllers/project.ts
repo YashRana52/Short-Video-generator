@@ -1,3 +1,5 @@
+import path from "path";
+
 import * as Sentry from "@sentry/node";
 import { Request, Response } from "express";
 import { prisma } from "../lib/prisma.js";
@@ -63,8 +65,8 @@ export const createProject = async (req: Request, res: Response) => {
       images.map((file) =>
         cloudinary.uploader.upload(file.path, {
           resource_type: "image",
-        })
-      )
+        }),
+      ),
     );
 
     /* ===== Create Project ===== */
@@ -137,7 +139,7 @@ ${userPrompt}`,
 
     const uploadedGenerated = await cloudinary.uploader.upload(
       `data:image/png;base64,${buffer.toString("base64")}`,
-      { resource_type: "image" }
+      { resource_type: "image" },
     );
 
     /* Update Project  */
@@ -280,7 +282,7 @@ export const createVideo = async (req: Request, res: Response) => {
     if (!video) {
       throw new Error(
         operation?.response?.raiMediaFilteredReasons?.[0] ||
-          "Video generation failed"
+          "Video generation failed",
       );
     }
 
